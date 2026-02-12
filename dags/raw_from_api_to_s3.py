@@ -1,1 +1,1 @@
-from airflow inport dag
+from airflow import DAG
