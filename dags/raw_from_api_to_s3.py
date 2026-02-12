@@ -1,14 +1,20 @@
 import logging
+#Стандартная библиотека Python для ведения логов.
+#Позволяет писать сообщения в консоль/файл вместо print().
 
 import duckdb
+#DuckDB — встроенная аналитическая база данных (как SQLite, но для аналитики).
+#Позволяет выполнять SQL-запросы прямо в Python без отдельного сервера — удобно для обработки данных о землетрясениях.
 import pendulum
+#Библиотека для работы с датами и временем (замена стандартному datetime).
+# В Airflow используется для указания временных зон в расписании DAG.
 from airflow import DAG
 from airflow.models import Variable
 from airflow.operators.empty import EmptyOperator
 from airflow.operators.python import PythonOperator
 
 # Конфигурация DAG
-OWNER = "i.korsakov"
+OWNER = "a.chernov"
 DAG_ID = "raw_from_api_to_s3"
 
 # Используемые таблицы в DAG
