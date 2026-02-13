@@ -1,2 +1,0 @@
-access="OMrt0bjFD8FmRJ2Vx9AK"
-secrets="WWfirS2KLsSptYUKtNJbwPCTwfH9igF0ungQdZqe"

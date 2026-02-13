@@ -7,5 +7,5 @@ RUN apt-get update && apt-get install -y \
 
 USER airflow
 RUN pip install --no-cache-dir \
-    duckdb \
-    psycopg2-binary
+    duckdb==1.2.2 \
+    psycopg2-binary==2.9.10

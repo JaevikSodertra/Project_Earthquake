@@ -28,6 +28,14 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
+    volumes:
+      - postgres-dwh-volume:/var/lib/postgresql/data
+      - ./init_dwh.sql:/docker-entrypoint-initdb.d/init_dwh.sql
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      retries: 5
+      start_period: 5s
     restart: always
     ports:
       - "5432:5432"
@@ -125,4 +133,5 @@ services:
 
 volumes:
   postgres-db-volume:
+  postgres-dwh-volume:
   metabase-data:
