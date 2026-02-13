@@ -8,7 +8,7 @@ Data-pipeline для сбора данных о землетрясениях с 
 USGS API ──> DuckDB ──> MinIO (S3)
                             │
                             v
-                        DuckDB ──> PostgreSQL DWH ──> Metabase
+                        DuckDB ──> PostgreSQL DWH (ods) ──> Airflow (dm) ──> Metabase
 ```
 
 **Airflow DAGs:**
@@ -17,6 +17,8 @@ USGS API ──> DuckDB ──> MinIO (S3)
 |-----|----------|
 | `raw_from_api_to_s3` | Забирает CSV с USGS API, сохраняет parquet в MinIO |
 | `raw_from_s3_to_pg` | Читает parquet из MinIO, загружает в `ods.fct_earthquake` |
+| `fct_count_day_earthquake` | Считает количество землетрясений за день → `dm.fct_count_day_earthquake` |
+| `fct_avg_day_earthquake` | Считает среднюю магнитуду за день → `dm.fct_avg_day_earthquake` |
 
 ## Стек
 
