@@ -8,9 +8,6 @@ from airflow.sensors.external_task import ExternalTaskSensor
 OWNER = "a.chernov"
 DAG_ID = "fct_count_day_earthquake"
 
-# Используемые таблицы в DAG
-LAYER = "raw"
-SOURCE = "earthquake"
 SCHEMA = "dm"
 TARGET_TABLE = "fct_count_day_earthquake"
 
@@ -26,7 +23,6 @@ SHORT_DESCRIPTION = "SHORT DESCRIPTION"
 args = {
     "owner": OWNER,
     "start_date": pendulum.datetime(2025, 5, 1, tz="Europe/Moscow"),
-    "catchup": True,
     "retries": 3,
     "retry_delay": pendulum.duration(hours=1),
 }
@@ -36,6 +32,7 @@ with DAG(
     dag_id=DAG_ID,
     schedule_interval="0 5 * * *",
     default_args=args,
+    catchup=True,
     tags=["dm", "pg"],
     description=SHORT_DESCRIPTION,
     concurrency=1,
@@ -51,6 +48,7 @@ with DAG(
     sensor_on_raw_layer = ExternalTaskSensor(
         task_id="sensor_on_raw_layer",
         external_dag_id="raw_from_s3_to_pg",
+        external_task_id="end",
         allowed_states=["success"],
         mode="reschedule",
         timeout=360000,  # длительность работы сенсора
@@ -74,7 +72,7 @@ with DAG(
         CREATE TABLE stg."tmp_{TARGET_TABLE}_{{{{ data_interval_start.format('YYYY-MM-DD') }}}}" AS
         SELECT
             time::date AS date,
-            count(*)
+            count(*) AS count
         FROM
             ods.fct_earthquake
         WHERE
