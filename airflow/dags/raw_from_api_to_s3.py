@@ -15,7 +15,9 @@ DAG_ID = "raw_from_api_to_s3"
 LAYER = "raw"
 SOURCE = "earthquake"
 
-# S3 — переменные загружаются внутри задач, чтобы не блокировать парсинг DAG
+# S3
+ACCESS_KEY = Variable.get("access_key")
+SECRET_KEY = Variable.get("secret_key")
 
 LONG_DESCRIPTION = """
 # LONG DESCRIPTION
