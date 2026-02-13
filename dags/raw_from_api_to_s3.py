@@ -21,9 +21,7 @@ DAG_ID = "raw_from_api_to_s3"
 LAYER = "raw"
 SOURCE = "earthquake"
 
-# S3
-ACCESS_KEY = Variable.get("access_key")
-SECRET_KEY = Variable.get("secret_key")
+# S3 — переменные загружаются внутри задач, чтобы не блокировать парсинг DAG
 
 LONG_DESCRIPTION = """
 # LONG DESCRIPTION
@@ -51,6 +49,9 @@ def get_dates(**context) -> tuple[str, str]:
 def get_and_transfer_api_data_to_s3(**context):
     """"""
 
+    access_key = Variable.get("access_key")
+    secret_key = Variable.get("secret_key")
+
     start_date, end_date = get_dates(**context)
     logging.info(f"💻 Start load for dates: {start_date}/{end_date}")
     con = duckdb.connect()
@@ -62,8 +63,8 @@ def get_and_transfer_api_data_to_s3(**context):
         LOAD httpfs;
         SET s3_url_style = 'path';
         SET s3_endpoint = 'minio:9000';
-        SET s3_access_key_id = '{ACCESS_KEY}';
-        SET s3_secret_access_key = '{SECRET_KEY}';
+        SET s3_access_key_id = '{access_key}';
+        SET s3_secret_access_key = '{secret_key}';
         SET s3_use_ssl = FALSE;
 
         COPY
